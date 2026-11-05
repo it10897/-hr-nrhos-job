@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ระบบรับสมัครงานออนไลน์ | โรงพยาบาลนางรอง</title>
+  <style>
+    :root {
+      --teal:#087f8c; --dark:#06636d; --light:#e8f7f8;
+      --text:#20313a; --muted:#657780; --line:#dce6e9;
+      --bg:#f3f8f9; --white:#fff; --red:#b42318;
+      --shadow:0 10px 30px rgba(18,57,67,.08);
+    }
+    *{box-sizing:border-box}
+    body{margin:0;color:var(--text);background:var(--bg);font-family:Tahoma,"Noto Sans Thai",sans-serif;line-height:1.6}
+    button,input,select,textarea{font:inherit}
+    .top-line{height:7px;background:linear-gradient(90deg,var(--dark),#23a48e)}
+    .hero{color:white;background:linear-gradient(120deg,#06636d,#087f8c 58%,#20a28e)}
+    .hero-inner,.nav-inner,main,.footer-inner{width:min(1100px,calc(100% - 32px));margin:auto}
+    .hero-inner{padding:22px 0 30px}
+    .brand{display:flex;align-items:center;gap:13px;margin-bottom:18px}
+    .brand-logo{width:72px;height:72px;flex:0 0 72px}
+    .brand p{margin:0}.brand-name{font-weight:bold}.brand-sub{font-size:13px;color:#ffffffd0}
+    .hero h1{margin:0 0 5px;font-size:clamp(25px,4vw,35px)}
+    .hero-description{margin:0;color:#ffffffdf}
+    nav{background:white;border-bottom:1px solid var(--line);box-shadow:0 3px 12px #14323c0a}
+    .nav-inner{display:flex;flex-wrap:wrap;gap:8px;padding:10px 0}
+    .nav-button,.tab-button{padding:9px 14px;border:0;border-radius:9px;color:var(--text);background:transparent;cursor:pointer;font-weight:bold}
+    .nav-button:hover,.nav-button.active,.tab-button:hover,.tab-button.active{color:var(--dark);background:var(--light)}
+    main{padding:28px 0 48px}
+    .view,.staff-panel{display:none}.view.active,.staff-panel.active{display:block}
+    .page-title{margin:0 0 5px;font-size:25px}.intro{margin:0 0 20px;color:var(--muted)}
+    .notice{margin:0 0 18px;padding:13px 15px;border:1px solid #f0d692;border-radius:11px;color:#604b16;background:#fff8df;font-size:14px}
+    .section-heading{display:flex;justify-content:space-between;align-items:end;gap:12px;margin:22px 0 13px}
+    .section-heading h2{margin:0;font-size:20px}.section-heading p{margin:0;color:var(--muted);font-size:13px}
+    .cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+    .card,.panel{border:1px solid var(--line);border-radius:15px;background:white;box-shadow:var(--shadow)}
+    .job-card{padding:19px}.job-card h3{margin:8px 0;font-size:19px}.job-card p{margin:8px 0}
+    .job-meta{color:var(--muted);font-size:14px}.job-description{min-height:44px}
+    .badge{display:inline-block;padding:4px 10px;border-radius:999px;color:var(--dark);background:var(--light);font-size:12px;font-weight:bold}
+    .badge.closed{color:#784a00;background:#fff1cf}
+    .button{min-height:41px;padding:8px 14px;border:0;border-radius:9px;cursor:pointer;font-weight:bold}
+    .button-primary{color:white;background:var(--teal)}.button-primary:hover{background:var(--dark)}
+    .button-secondary{color:var(--text);background:#edf2f4}.button-danger{color:var(--red);background:#fff0ee}
+    .button-small{min-height:34px;padding:5px 10px;font-size:13px}.button:disabled{opacity:.55;cursor:not-allowed}
+    .panel{padding:21px}.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+    .field.full{grid-column:1/-1}.field label{display:block;margin-bottom:5px;font-size:14px;font-weight:bold}
+    input,select,textarea{width:100%;min-height:43px;padding:9px 11px;border:1px solid #cfdde1;border-radius:9px;color:var(--text);background:white;outline:none}
+    textarea{min-height:88px;resize:vertical}
+    input:focus,select:focus,textarea:focus{border-color:var(--teal);box-shadow:0 0 0 3px #087f8c1f}
+    input[type=file]{padding:8px}.hint{margin:5px 0 0;color:var(--muted);font-size:12px}
+    .required{color:var(--red)}
+    .check-row{display:flex;gap:9px;align-items:flex-start;margin-top:13px}
+    .check-row input{width:18px;min-height:18px;height:18px;margin-top:4px}
+    .check-row label{font-weight:normal}
+    .actions,.inline-actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:17px}
+    .inline-actions{gap:6px;margin:0}
+    .message{display:none;margin-top:13px;padding:11px 13px;border-radius:9px}
+    .message.error{display:block;color:#8a1c13;background:#fff0ee}
+    .message.success{display:block;color:#075b34;background:#effaf3}
+    .login-box{max-width:460px;margin:18px auto}.login-box h2{margin-top:0}
+    .demo-hint{margin-top:14px;padding:11px;border-radius:9px;background:#fff8df;font-size:13px}
+    .staff-header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:15px}
+    .staff-tabs{display:flex;flex-wrap:wrap;gap:7px;margin:0 0 16px;padding:6px;border:1px solid var(--line);border-radius:11px;background:white}
+    .stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:16px}
+    .stat{padding:14px;border:1px solid var(--line);border-radius:11px;background:white}
+    .stat span{display:block;color:var(--muted);font-size:13px}.stat strong{font-size:24px}
+    .table-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;background:white}
+    th,td{padding:10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+    th{color:#49616a;background:#f6fafb;font-size:13px;white-space:nowrap}td{font-size:14px}
+    .empty{padding:24px;color:var(--muted);text-align:center}.status-select{min-width:140px;padding:6px}
+    .editor-title{margin:0 0 15px;font-size:19px}.hidden{display:none!important}
+    footer{padding:22px 0;border-top:1px solid var(--line);color:var(--muted);background:white;text-align:center;font-size:13px}
+    @media(max-width:700px){.cards,.form-grid,.stats{grid-template-columns:1fr}.field.full{grid-column:auto}.staff-header{align-items:flex-start;flex-direction:column}.panel{padding:16px}}
+  </style>
+</head>
+<body>
+  <div class="top-line"></div>
+
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="brand">
+        <!-- โลโก้เวกเตอร์ฝังอยู่ใน HTML ไม่ต้องใช้ไฟล์รูปแยก -->
+        <svg class="brand-logo" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="โลโก้โรงพยาบาลนางรอง">
+          <defs>
+            <linearGradient id="logoCyan" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#04d0e7"/><stop offset="1" stop-color="#0083d4"/>
+            </linearGradient>
+            <path id="topArc" d="M38 150 A112 112 0 0 1 262 150"/>
+            <path id="bottomArc" d="M45 171 A105 105 0 0 0 255 171"/>
+          </defs>
+          <circle cx="150" cy="150" r="145" fill="#09bce8"/>
+          <circle cx="150" cy="150" r="137" fill="#063880"/>
+          <circle cx="150" cy="150" r="108" fill="#fff"/>
+          <circle cx="150" cy="150" r="104" fill="none" stroke="#08c5e5" stroke-width="3"/>
+          <text fill="#fff" font-family="Tahoma,sans-serif" font-size="18" font-weight="700" letter-spacing="1">
+            <textPath href="#topArc" startOffset="50%" text-anchor="middle">โรงพยาบาลนางรอง</textPath>
+          </text>
+          <text fill="#fff" font-family="Arial,sans-serif" font-size="13" font-weight="700" letter-spacing="2">
+            <textPath href="#bottomArc" startOffset="50%" text-anchor="middle">NANGRONG HOSPITAL</textPath>
+          </text>
+          <path d="M140 44h20v20h20v20h-20v20h-20V84h-20V64h20z" fill="url(#logoCyan)"/>
+          <circle cx="112" cy="126" r="13" fill="url(#logoCyan)"/>
+          <circle cx="188" cy="126" r="13" fill="url(#logoCyan)"/>
+          <circle cx="150" cy="119" r="16" fill="#0750a6"/>
+          <path d="M87 166c0-18 12-29 25-29s25 11 25 29v12H87z" fill="#0750a6"/>
+          <path d="M163 166c0-18 12-29 25-29s25 11 25 29v12h-50z" fill="url(#logoCyan)"/>
+          <path d="M126 160c0-19 10-29 24-29s24 10 24 29v22h-48z" fill="#0750a6"/>
+          <text x="150" y="222" text-anchor="middle" font-family="Arial,sans-serif" font-size="48" font-weight="900" font-style="italic" fill="#0649a0">HR</text>
+          <text x="150" y="246" text-anchor="middle" font-family="Arial,sans-serif" font-size="17" font-weight="800" fill="#0649a0">NRHOS</text>
+        </svg>
+        <div>
+          <p class="brand-name">โรงพยาบาลนางรอง</p>
+          <p class="brand-sub">กลุ่มงานทรัพยากรบุคคล</p>
+        </div>
+      </div>
+      <h1>ระบบรับสมัครงานออนไลน์</h1>
+      <p class="hero-description">ประกาศรับสมัครและยื่นใบสมัครผ่านระบบออนไลน์</p>
+    </div>
+  </header>
+
+  <nav aria-label="เมนูหลัก">
+    <div class="nav-inner">
+      <button class="nav-button active" data-view="homeView">หน้าแรก / ประกาศรับสมัคร</button>
+      <button class="nav-button" data-view="applyView">สมัครงาน</button>
+      <button class="nav-button" data-view="loginView">ระบบเจ้าหน้าที่</button>
+    </div>
+  </nav>
+
+  <main>
+    <section id="homeView" class="view active">
+      <h2 class="page-title">ประกาศรับสมัครงาน</h2>
+      <p class="intro">เลือกดูตำแหน่งที่เปิดรับ และตรวจสอบรายละเอียดก่อนสมัคร</p>
+      <div class="notice">ประกาศเริ่มต้นเป็นข้อมูลตัวอย่าง โปรดแก้ไขให้ตรงกับประกาศทางการก่อนเผยแพร่</div>
+      <div class="section-heading"><h2>ตำแหน่งที่เปิดรับสมัคร</h2><p id="jobCount"></p></div>
+      <div id="jobCards" class="cards"></div>
+    </section>
+
+    <section id="applyView" class="view">
+      <h2 class="page-title">แบบฟอร์มสมัครงาน</h2>
+      <p class="intro">กรอกข้อมูลและแนบเอกสารประกอบการสมัคร</p>
+      <div class="notice">ต้นแบบนี้บันทึกข้อมูลในเบราว์เซอร์เครื่องนี้เท่านั้น ไม่ได้ส่งข้อมูลให้โรงพยาบาลและไม่ได้รับชำระเงินจริง</div>
+
+      <form id="applicationForm" class="panel">
+        <div class="form-grid">
+          <div class="field full">
+            <label for="position">ตำแหน่งที่สมัคร <span class="required">*</span></label>
+            <select id="position" name="position" required><option value="">-- เลือกตำแหน่ง --</option></select>
+          </div>
+          <div class="field">
+            <label for="prefix">คำนำหน้าชื่อ <span class="required">*</span></label>
+            <select id="prefix" required>
+              <option value="">-- เลือก --</option><option>นาย</option><option>นาง</option><option>นางสาว</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="firstName">ชื่อ <span class="required">*</span></label>
+            <input id="firstName" required>
+          </div>
+          <div class="field">
+            <label for="lastName">นามสกุล <span class="required">*</span></label>
+            <input id="lastName" required>
+          </div>
+          <div class="field">
+            <label for="phone">โทรศัพท์มือถือ <span class="required">*</span></label>
+            <input id="phone" type="tel" inputmode="tel" required>
+          </div>
+          <div class="field">
+            <label for="email">อีเมล</label>
+            <input id="email" type="email" placeholder="name@example.com">
+          </div>
+
+          <div class="field full">
+            <label for="houseRegistration">สำเนาทะเบียนบ้าน <span class="required">*</span></label>
+            <input id="houseRegistration" type="file" accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png" required>
+            <p class="hint">รองรับ PDF, JPG, PNG ขนาดไม่เกิน 10 MB</p>
+          </div>
+          <div class="field full">
+            <label for="nationalIdCopy">สำเนาบัตรประชาชน <span class="required">*</span></label>
+            <input id="nationalIdCopy" type="file" accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png" required>
+            <p class="hint">รองรับ PDF, JPG, PNG ขนาดไม่เกิน 10 MB</p>
+          </div>
+          <div class="field full">
+            <label for="educationCertificate">วุฒิการศึกษา <span class="required">*</span></label>
+            <input id="educationCertificate" type="file" accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png" required>
+            <p class="hint">รองรับ PDF, JPG, PNG ขนาดไม่เกิน 10 MB</p>
+          </div>
+          <div class="field full">
+            <label for="otherDocuments">เอกสารอื่น ๆ</label>
+            <input id="otherDocuments" type="file" multiple accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png">
+            <p class="hint">แนบได้หลายไฟล์ รองรับ PDF, JPG, PNG ขนาดไม่เกิน 10 MB ต่อไฟล์</p>
+          </div>
+          <div class="field full">
+            <label for="paymentSlip">หลักฐานการชำระเงิน (ถ้ามี)</label>
+            <input id="paymentSlip" type="file" accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png">
+            <p class="hint">ยังไม่เชื่อมระบบชำระเงินจริง</p>
+          </div>
+        </div>
+
+        <div class="check-row">
+          <input id="confirm" type="checkbox" required>
+          <label for="confirm">ข้าพเจ้ารับรองว่าข้อมูลที่กรอกเป็นความจริง <span class="required">*</span></label>
+        </div>
+        <div class="check-row">
+          <input id="consent" type="checkbox" required>
+          <label for="consent">ข้าพเจ้ายินยอมให้ใช้ข้อมูลเพื่อดำเนินการรับสมัครงาน <span class="required">*</span></label>
+        </div>
+        <div id="applyMessage" class="message" role="status"></div>
+        <div class="actions">
+          <button class="button button-primary" type="submit">ส่งใบสมัครตัวอย่าง</button>
+          <button class="button button-secondary" type="reset">ล้างข้อมูล</button>
+        </div>
+      </form>
+    </section>
+
+    <section id="loginView" class="view">
+      <div class="login-box panel">
+        <h2>เข้าสู่ระบบเจ้าหน้าที่</h2>
+        <p class="intro">ระบบจัดการใบสมัคร ประกาศรับสมัคร และบัญชีผู้ใช้งาน</p>
+        <form id="loginForm">
+          <div class="field"><label for="username">ชื่อผู้ใช้</label><input id="username" autocomplete="username" required></div>
+          <div class="field" style="margin-top:12px"><label for="password">รหัสผ่าน</label><input id="password" type="password" autocomplete="current-password" required></div>
+          <div id="loginMessage" class="message" role="alert"></div>
+          <div class="actions"><button class="button button-primary" type="submit">เข้าสู่ระบบ</button></div>
+        </form>
+        <div class="demo-hint"><strong>บัญชีผู้ดูแลระบบทดลอง:</strong> <code>hr</code> / <code>demo1234</code></div>
+      </div>
+    </section>
+
+    <section id="staffView" class="view">
+      <div class="staff-header">
+        <div><h2 class="page-title">ระบบเจ้าหน้าที่</h2><p id="staffWelcome" class="intro" style="margin-bottom:0"></p></div>
+        <button id="logoutButton" class="button button-secondary" type="button">ออกจากระบบ</button>
+      </div>
+      <div class="notice">ข้อมูลเก็บในเบราว์เซอร์เครื่องนี้ ไม่ใช่ฐานข้อมูลส่วนกลาง และระบบนี้เป็นเพียงต้นแบบ</div>
+
+      <div class="staff-tabs">
+        <button class="tab-button active" data-tab="applicationsPanel">จัดการใบสมัคร</button>
+        <button class="tab-button" data-tab="announcementsPanel">จัดการประกาศรับสมัคร</button>
+        <button class="tab-button admin-only hidden" data-tab="usersPanel">จัดการผู้ใช้งาน</button>
+      </div>
+
+      <div id="applicationsPanel" class="staff-panel active">
+        <div class="stats">
+          <div class="stat"><span>ใบสมัครทั้งหมด</span><strong id="totalApplications">0</strong></div>
+          <div class="stat"><span>รอตรวจสอบ</span><strong id="pendingApplications">0</strong></div>
+          <div class="stat"><span>ผ่านการพิจารณา</span><strong id="approvedApplications">0</strong></div>
+        </div>
+        <div class="panel"><h3 style="margin-top:0">รายการใบสมัคร</h3><div id="applicationsTable" class="table-wrap"></div></div>
+      </div>
+
+      <div id="announcementsPanel" class="staff-panel">
+        <div class="panel" style="margin-bottom:16px">
+          <h3 id="announcementEditorTitle" class="editor-title">เพิ่มประกาศรับสมัคร</h3>
+          <form id="announcementForm">
+            <input id="announcementId" type="hidden">
+            <div class="form-grid">
+              <div class="field full"><label for="jobTitle">ชื่อตำแหน่ง <span class="required">*</span></label><input id="jobTitle" required maxlength="120"></div>
+              <div class="field"><label for="jobOpenings">จำนวนอัตรา <span class="required">*</span></label><input id="jobOpenings" required maxlength="60" placeholder="เช่น 2 อัตรา"></div>
+              <div class="field"><label for="jobDeadline">วันปิดรับสมัคร <span class="required">*</span></label><input id="jobDeadline" required maxlength="100"></div>
+              <div class="field"><label for="jobFee">ค่าสมัคร</label><input id="jobFee" maxlength="60" placeholder="เช่น 300 บาท"></div>
+              <div class="field"><label for="jobStatus">สถานะประกาศ</label><select id="jobStatus"><option value="open">เปิดรับสมัคร</option><option value="closed">ปิดรับสมัคร</option></select></div>
+              <div class="field full"><label for="jobDescription">รายละเอียด / คุณสมบัติโดยย่อ</label><textarea id="jobDescription" maxlength="1000"></textarea></div>
+            </div>
+            <div id="announcementMessage" class="message" role="alert"></div>
+            <div class="actions">
+              <button id="saveAnnouncementButton" class="button button-primary" type="submit">บันทึกประกาศ</button>
+              <button id="cancelAnnouncementEdit" class="button button-secondary hidden" type="button">ยกเลิกการแก้ไข</button>
+            </div>
+          </form>
+        </div>
+        <div class="panel"><h3 style="margin-top:0">ประกาศทั้งหมด</h3><div id="announcementsTable" class="table-wrap"></div></div>
+      </div>
+
+      <div id="usersPanel" class="staff-panel">
+        <div class="panel" style="margin-bottom:16px">
+          <h3 id="userEditorTitle" class="editor-title">เพิ่มบัญชีเจ้าหน้าที่</h3>
+          <form id="userForm">
+            <input id="userId" type="hidden">
+            <div class="form-grid">
+              <div class="field"><label for="userDisplayName">ชื่อผู้ใช้งาน <span class="required">*</span></label><input id="userDisplayName" required maxlength="100"></div>
+              <div class="field"><label for="userName">ชื่อบัญชีเข้าสู่ระบบ <span class="required">*</span></label><input id="userName" required maxlength="50" autocomplete="off"></div>
+              <div class="field"><label for="userPassword">รหัสผ่าน</label><input id="userPassword" type="password" minlength="6" autocomplete="new-password"><p id="passwordHint" class="hint">กำหนดรหัสผ่านอย่างน้อย 6 ตัวอักษร</p></div>
+              <div class="field"><label for="userRole">สิทธิ์การใช้งาน</label><select id="userRole"><option value="staff">เจ้าหน้าที่</option><option value="admin">ผู้ดูแลระบบ</option></select></div>
+            </div>
+            <div id="userMessage" class="message" role="alert"></div>
+            <div class="actions">
+              <button id="saveUserButton" class="button button-primary" type="submit">เพิ่มบัญชี</button>
+              <button id="cancelUserEdit" class="button button-secondary hidden" type="button">ยกเลิก</button>
+            </div>
+          </form>
+        </div>
+        <div class="panel"><h3 style="margin-top:0">บัญชีเจ้าหน้าที่</h3><div id="usersTable" class="table-wrap"></div></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+
+  <div class="footer-inner">
+
+    <div>กลุ่มงานทรัพยากรบุคคล โรงพยาบาลนางรอง</div>
+
+    <div>จัดทำโดย Rachan Tunsuriwong</div>
+
+  </div>
+
+</footer>
+
+<script>
+"use strict";
+
+/* ชื่อ key ที่ใช้เก็บข้อมูลใน localStorage ของเบราว์เซอร์ */
+const JOBS_KEY = "nr_demo_jobs_v3";
+const APPLICATIONS_KEY = "nr_demo_applications_v3";
+const USERS_KEY = "nr_demo_users_v3";
+
+/* กำหนดชนิดและขนาดไฟล์ที่รับได้ */
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB
+const ALLOWED_EXTENSIONS = ["pdf", "jpg", "jpeg", "png"];
+
+/* สถานะที่เจ้าหน้าที่เลือกให้ใบสมัครได้ */
+const STATUS_OPTIONS = [
+  "รอตรวจสอบ",
+  "เอกสารไม่ครบ",
+  "ผ่านการพิจารณา",
+  "ไม่ผ่านการพิจารณา"
+];
+
+/* เก็บข้อมูลผู้ใช้ที่เข้าสู่ระบบอยู่ในแท็บนี้ */
+let currentUser = null;
+
+/* ประกาศตัวอย่างที่แสดงเมื่อเปิดเว็บครั้งแรก */
+const defaultJobs = [
+  {
+    id: "job-nurse",
+    title: "พยาบาลวิชาชีพ",
+    openings: "2 อัตรา",
+    deadline: "ระบุวันปิดรับสมัคร",
+    fee: "ระบุตามประกาศ",
+    description: "โปรดตรวจสอบคุณสมบัติและใบอนุญาตประกอบวิชาชีพตามประกาศฉบับจริง",
+    status: "open"
+  },
+  {
+    id: "job-admin",
+    title: "เจ้าพนักงานธุรการ",
+    openings: "1 อัตรา",
+    deadline: "ระบุวันปิดรับสมัคร",
+    fee: "ระบุตามประกาศ",
+    description: "รับสมัครตามคุณสมบัติและหลักเกณฑ์ที่ระบุในประกาศทางการ",
+    status: "open"
+  },
+  {
+    id: "job-assistant",
+    title: "พนักงานช่วยเหลือคนไข้",
+    openings: "3 อัตรา",
+    deadline: "ระบุวันปิดรับสมัคร",
+    fee: "ระบุตามประกาศ",
+    description: "โปรดตรวจสอบวุฒิการศึกษา เอกสาร และเงื่อนไขจากประกาศทางการ",
+    status: "open"
+  }
+];
+
+/* อ่านข้อมูลจาก localStorage และคืนค่าเริ่มต้นเมื่อข้อมูลเสียหรือไม่ใช่ array */
+function readStorage(key, fallback) {
+  try {
+    const value = JSON.parse(localStorage.getItem(key));
+    return Array.isArray(value) ? value : fallback;
+  } catch (error) {
+    console.error("อ่านข้อมูลจากเบราว์เซอร์ไม่สำเร็จ:", error);
+    return fallback;
+  }
+}
+
+/* ฟังก์ชันชุดนี้ใช้ดึงและบันทึกประกาศรับสมัคร */
+function getJobs() {
+  return readStorage(JOBS_KEY, []);
+}
+
+function saveJobs(items) {
+  localStorage.setItem(JOBS_KEY, JSON.stringify(items));
+}
+
+/* ฟังก์ชันชุดนี้ใช้ดึงและบันทึกใบสมัคร */
+function getApplications() {
+  return readStorage(APPLICATIONS_KEY, []);
+}
+
+function saveApplications(items) {
+  localStorage.setItem(APPLICATIONS_KEY, JSON.stringify(items));
+}
+
+/* ฟังก์ชันชุดนี้ใช้ดึงและบันทึกบัญชีผู้ใช้งาน */
+function getUsers() {
+  return readStorage(USERS_KEY, []);
+}
+
+function saveUsers(items) {
+  localStorage.setItem(USERS_KEY, JSON.stringify(items));
+}
+
+/* ตั้งค่าข้อมูลเริ่มต้นเฉพาะครั้งแรกที่เปิดเว็บ */
+function initializeStorage() {
+  if (localStorage.getItem(JOBS_KEY) === null) {
+    saveJobs(defaultJobs);
+  }
+
+  if (localStorage.getItem(USERS_KEY) === null) {
+    saveUsers([{
+      id: "default-admin",
+      username: "hr",
+      displayName: "ผู้ดูแลระบบ",
+      password: "demo1234",
+      role: "admin"
+    }]);
+  }
+}
+
+/* แปลงอักขระพิเศษก่อนนำข้อมูลไปใส่ใน HTML ช่วยลดความเสี่ยงจาก HTML injection */
+function escapeHtml(value) {
+  return String(value ?? "").replace(/[&<>"']/g, character => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#039;"
+  })[character]);
+}
+
+/* แสดงข้อความแจ้งผล เช่น สำเร็จหรือผิดพลาด */
+function showMessage(element, type, text) {
+  element.className = "message " + type;
+  element.textContent = text;
+}
+
+/* สลับหน้าที่แสดง และโหลดข้อมูลเจ้าหน้าที่เมื่อเข้าสู่หน้าระบบ */
+function showView(viewId) {
+  // ห้ามเปิดหน้าระบบเจ้าหน้าที่ถ้ายังไม่ได้เข้าสู่ระบบ
+  if (viewId === "staffView" && !currentUser) {
+    viewId = "loginView";
+  }
+
+  document.querySelectorAll(".view").forEach(view => {
+    view.classList.toggle("active", view.id === viewId);
+  });
+
+  document.querySelectorAll(".nav-button").forEach(button => {
+    const isStaffPage = viewId === "staffView" &&
+      button.dataset.view === "loginView";
+
+    button.classList.toggle(
+      "active",
+      button.dataset.view === viewId || isStaffPage
+    );
+  });
+
+  if (viewId === "staffView") {
+    renderApplications();
+    renderAnnouncementsTable();
+
+    if (currentUser?.role === "admin") {
+      renderUsers();
+    }
+  }
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+/* กำหนดการทำงานของปุ่มเมนูหลัก */
+document.querySelectorAll(".nav-button").forEach(button => {
+  button.addEventListener("click", () => {
+    showView(button.dataset.view);
+  });
+});
+
+/* สลับแท็บภายในระบบเจ้าหน้าที่ */
+document.querySelectorAll(".tab-button").forEach(button => {
+  button.addEventListener("click", () => {
+    // เฉพาะผู้ดูแลระบบเท่านั้นที่เปิดแท็บจัดการบัญชีได้
+    if (button.dataset.tab === "usersPanel" &&
+        currentUser?.role !== "admin") {
+      return;
+    }
+
+    document.querySelectorAll(".tab-button").forEach(tab => {
+      tab.classList.remove("active");
+    });
+
+    document.querySelectorAll(".staff-panel").forEach(panel => {
+      panel.classList.remove("active");
+    });
+
+    button.classList.add("active");
+    document.getElementById(button.dataset.tab).classList.add("active");
+
+    // โหลดข้อมูลใหม่เมื่อเปิดแต่ละแท็บ
+    if (button.dataset.tab === "applicationsPanel") renderApplications();
+    if (button.dataset.tab === "announcementsPanel") renderAnnouncementsTable();
+    if (button.dataset.tab === "usersPanel") renderUsers();
+  });
+});
+
+/* สร้างการ์ดประกาศบนหน้าแรก และเติมตำแหน่งที่เปิดรับลงในแบบฟอร์ม */
+function renderHome() {
+  const jobs = getJobs();
+  const openJobs = jobs.filter(job => job.status === "open");
+  const container = document.getElementById("jobCards");
+
+  document.getElementById("jobCount").textContent =
+    `${openJobs.length} ตำแหน่งที่เปิดรับ`;
+
+  if (jobs.length === 0) {
+    container.innerHTML =
+      '<div class="panel empty">ขณะนี้ยังไม่มีประกาศรับสมัครงาน</div>';
+  } else {
+    container.innerHTML = jobs.map(job => {
+      const isOpen = job.status === "open";
+
+      return `
+        <article class="card job-card">
+          <span class="badge ${isOpen ? "" : "closed"}">
+            ${isOpen ? "เปิดรับสมัคร" : "ปิดรับสมัคร"}
+          </span>
+          <h3>${escapeHtml(job.title)}</h3>
+          <div class="job-meta">
+            <div>จำนวน: ${escapeHtml(job.openings)}</div>
+            <div>ปิดรับสมัคร: ${escapeHtml(job.deadline)}</div>
+            <div>ค่าสมัคร: ${escapeHtml(job.fee || "โปรดดูประกาศ")}</div>
+          </div>
+          <p class="job-description">
+            ${escapeHtml(job.description || "โปรดดูรายละเอียดในประกาศฉบับเต็ม")}
+          </p>
+          ${isOpen
+            ? `<button class="button button-primary apply-job"
+                 type="button" data-job-id="${escapeHtml(job.id)}">
+                 สมัครตำแหน่งนี้
+               </button>`
+            : `<button class="button button-secondary"
+                 type="button" disabled>ปิดรับสมัครแล้ว</button>`}
+        </article>
+      `;
+    }).join("");
+  }
+
+  // แสดงเฉพาะตำแหน่งที่เปิดรับในช่องเลือกตำแหน่งของแบบฟอร์ม
+  const positionSelect = document.getElementById("position");
+  positionSelect.innerHTML =
+    '<option value="">-- เลือกตำแหน่ง --</option>' +
+    openJobs.map(job =>
+      `<option value="${escapeHtml(job.title)}">${escapeHtml(job.title)}</option>`
+    ).join("");
+
+  // ปุ่มสมัครในการ์ดจะเลือกตำแหน่งให้ แล้วพาไปหน้าแบบฟอร์ม
+  container.querySelectorAll(".apply-job").forEach(button => {
+    button.addEventListener("click", () => {
+      const job = openJobs.find(item => item.id === button.dataset.jobId);
+
+      if (job) {
+        positionSelect.value = job.title;
+      }
+
+      showView("applyView");
+    });
+  });
+}
+
+/* ตรวจสอบนามสกุลและขนาดไฟล์ที่ผู้สมัครเลือก */
+function validateFiles(files) {
+  for (const file of files) {
+    const extension = file.name.split(".").pop().toLowerCase();
+
+    if (!ALLOWED_EXTENSIONS.includes(extension)) {
+      return `ไฟล์ "${file.name}" ไม่ใช่ชนิด PDF, JPG หรือ PNG`;
+    }
+
+    if (file.size > MAX_FILE_SIZE) {
+      return `ไฟล์ "${file.name}" มีขนาดเกิน 10 MB`;
+    }
+  }
+
+  return "";
+}
+
+/* รับข้อมูลแบบฟอร์มสมัครงาน ตรวจไฟล์ และบันทึกข้อมูลตัวอย่าง */
+document.getElementById("applicationForm").addEventListener("submit", event => {
+  event.preventDefault();
+
+  const form = event.currentTarget;
+  const message = document.getElementById("applyMessage");
+
+  message.className = "message";
+  message.textContent = "";
+
+  if (!form.reportValidity()) {
+    return;
+  }
+
+  const house = document.getElementById("houseRegistration").files[0];
+  const idCopy = document.getElementById("nationalIdCopy").files[0];
+  const education = document.getElementById("educationCertificate").files[0];
+  const otherFiles = [...document.getElementById("otherDocuments").files];
+  const slips = [...document.getElementById("paymentSlip").files];
+
+  const fileError = validateFiles(
+    [house, idCopy, education, ...otherFiles, ...slips].filter(Boolean)
+  );
+
+  if (fileError) {
+    showMessage(message, "error", fileError);
+    return;
+  }
+
+  const now = new Date();
+
+  // เก็บข้อมูลผู้สมัครและชื่อไฟล์เท่านั้น ไม่ได้เก็บไฟล์จริง
+  const record = {
+    id: "DEMO-" + now.getTime().toString().slice(-8),
+    position: document.getElementById("position").value,
+    applicant:
+      document.getElementById("prefix").value +
+      document.getElementById("firstName").value.trim() + " " +
+      document.getElementById("lastName").value.trim(),
+    phone: document.getElementById("phone").value.trim(),
+    email: document.getElementById("email").value.trim(),
+    documents: {
+      houseRegistration: house.name,
+      nationalIdCopy: idCopy.name,
+      educationCertificate: education.name,
+      otherDocuments: otherFiles.map(file => file.name)
+    },
+    slips: slips.map(file => file.name),
+    status: "รอตรวจสอบ",
+    submittedAt: now.toLocaleString("th-TH")
+  };
+
+  const applications = getApplications();
+  applications.unshift(record);
+  saveApplications(applications);
+
+  showMessage(
+    message,
+    "success",
+    `บันทึกใบสมัครตัวอย่างแล้ว เลขอ้างอิง ${record.id}`
+  );
+
+  form.reset();
+});
+
+/* แสดงใบสมัครในตารางเจ้าหน้าที่ พร้อมตัวเลือกเปลี่ยนสถานะ */
+function renderApplications() {
+  const applications = getApplications();
+
+  document.getElementById("totalApplications").textContent =
+    applications.length;
+
+  document.getElementById("pendingApplications").textContent =
+    applications.filter(item => item.status === "รอตรวจสอบ").length;
+
+  document.getElementById("approvedApplications").textContent =
+    applications.filter(item => item.status === "ผ่านการพิจารณา").length;
+
+  const container = document.getElementById("applicationsTable");
+
+  if (applications.length === 0) {
+    container.innerHTML =
+      '<div class="empty">ยังไม่มีใบสมัครตัวอย่าง</div>';
+    return;
+  }
+
+  container.innerHTML = `
+    <table>
+      <thead>
+        <tr>
+          <th>เลขอ้างอิง / วันที่</th>
+          <th>ผู้สมัคร</th>
+          <th>ตำแหน่ง</th>
+          <th>ติดต่อ</th>
+          <th>เอกสารแนบ (ชื่อไฟล์)</th>
+          <th>สถานะ</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${applications.map((item, index) => `
+          <tr>
+            <td>${escapeHtml(item.id)}<br>
+              <small>${escapeHtml(item.submittedAt)}</small>
+            </td>
+            <td>${escapeHtml(item.applicant)}</td>
+            <td>${escapeHtml(item.position)}</td>
+            <td>${escapeHtml(item.phone)}<br>
+              ${escapeHtml(item.email || "-")}
+            </td>
+            <td>
+              ทะเบียนบ้าน: ${escapeHtml(item.documents?.houseRegistration || "-")}<br>
+              บัตรประชาชน: ${escapeHtml(item.documents?.nationalIdCopy || "-")}<br>
+              วุฒิการศึกษา: ${escapeHtml(item.documents?.educationCertificate || "-")}<br>
+              เอกสารอื่น: ${escapeHtml((item.documents?.otherDocuments || []).join(", ") || "-")}<br>
+              หลักฐานชำระ: ${escapeHtml((item.slips || []).join(", ") || "-")}
+            </td>
+            <td>
+              <select class="status-select" data-index="${index}" aria-label="สถานะใบสมัคร">
+                ${STATUS_OPTIONS.map(status => `
+                  <option value="${escapeHtml(status)}"
+                    ${item.status === status ? "selected" : ""}>
+                    ${escapeHtml(status)}
+                  </option>
+                `).join("")}
+              </select>
+            </td>
+          </tr>
+        `).join("")}
+      </tbody>
+    </table>
+  `;
+
+  // เมื่อเปลี่ยนสถานะ ให้บันทึกสถานะใหม่ลงใน localStorage
+  container.querySelectorAll(".status-select").forEach(select => {
+    select.addEventListener("change", () => {
+      const items = getApplications();
+      const index = Number(select.dataset.index);
+
+      if (!items[index]) return;
+
+      items[index].status = select.value;
+      saveApplications(items);
+      renderApplications();
+    });
+  });
+}
+
+/* แสดงประกาศทั้งหมดในระบบเจ้าหน้าที่ พร้อมปุ่มจัดการ */
+function renderAnnouncementsTable() {
+  const jobs = getJobs();
+  const container = document.getElementById("announcementsTable");
+
+  if (jobs.length === 0) {
+    container.innerHTML =
+      '<div class="empty">ยังไม่มีประกาศรับสมัคร</div>';
+    return;
+  }
+
+  container.innerHTML = `
+    <table>
+      <thead>
+        <tr>
+          <th>ตำแหน่ง</th><th>จำนวน</th><th>วันปิดรับ</th>
+          <th>ค่าสมัคร</th><th>สถานะ</th><th>จัดการ</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${jobs.map(job => `
+          <tr>
+            <td>${escapeHtml(job.title)}</td>
+            <td>${escapeHtml(job.openings)}</td>
+            <td>${escapeHtml(job.deadline)}</td>
+            <td>${escapeHtml(job.fee || "-")}</td>
+            <td>${job.status === "open" ? "เปิดรับสมัคร" : "ปิดรับสมัคร"}</td>
+            <td>
+              <div class="inline-actions">
+                <button class="button button-secondary button-small edit-job"
+                  type="button" data-id="${escapeHtml(job.id)}">แก้ไข</button>
+                <button class="button button-secondary button-small toggle-job"
+                  type="button" data-id="${escapeHtml(job.id)}">
+                  ${job.status === "open" ? "ปิดประกาศ" : "เปิดประกาศ"}
+                </button>
+                <button class="button button-danger button-small delete-job"
+                  type="button" data-id="${escapeHtml(job.id)}">ลบ</button>
+              </div>
+            </td>
+          </tr>
+        `).join("")}
+      </tbody>
+    </table>
+  `;
+
+  // ปุ่มแก้ไขจะเติมข้อมูลประกาศเดิมลงในแบบฟอร์ม
+  container.querySelectorAll(".edit-job").forEach(button => {
+    button.addEventListener("click", () => {
+      editAnnouncement(button.dataset.id);
+    });
+  });
+
+  // ปุ่มเปิด/ปิดเปลี่ยนสถานะประกาศและอัปเดตหน้าแรก
+  container.querySelectorAll(".toggle-job").forEach(button => {
+    button.addEventListener("click", () => {
+      const items = getJobs();
+      const job = items.find(item => item.id === button.dataset.id);
+
+      if (!job) return;
+
+      job.status = job.status === "open" ? "closed" : "open";
+      saveJobs(items);
+      renderAnnouncementsTable();
+      renderHome();
+    });
+  });
+
+  // ปุ่มลบจะถามยืนยันก่อนลบประกาศ
+  container.querySelectorAll(".delete-job").forEach(button => {
+    button.addEventListener("click", () => {
+      if (!confirm("ต้องการลบประกาศนี้หรือไม่?")) return;
+
+      saveJobs(getJobs().filter(item => item.id !== button.dataset.id));
+      renderAnnouncementsTable();
+      renderHome();
+      resetAnnouncementForm();
+    });
+  });
+}
+
+/* นำข้อมูลประกาศที่เลือกไปใส่ในแบบฟอร์มเพื่อแก้ไข */
+function editAnnouncement(id) {
+  const job = getJobs().find(item => item.id === id);
+  if (!job) return;
+
+  document.getElementById("announcementId").value = job.id;
+  document.getElementById("jobTitle").value = job.title;
+  document.getElementById("jobOpenings").value = job.openings;
+  document.getElementById("jobDeadline").value = job.deadline;
+  document.getElementById("jobFee").value = job.fee || "";
+  document.getElementById("jobStatus").value = job.status;
+  document.getElementById("jobDescription").value = job.description || "";
+  document.getElementById("announcementEditorTitle").textContent =
+    "แก้ไขประกาศรับสมัคร";
+  document.getElementById("saveAnnouncementButton").textContent =
+    "บันทึกการแก้ไข";
+  document.getElementById("cancelAnnouncementEdit").classList.remove("hidden");
+}
+
+/* ล้างแบบฟอร์มประกาศและเปลี่ยนกลับเป็นโหมดเพิ่มประกาศ */
+function resetAnnouncementForm() {
+  document.getElementById("announcementForm").reset();
+  document.getElementById("announcementId").value = "";
+  document.getElementById("announcementEditorTitle").textContent =
+    "เพิ่มประกาศรับสมัคร";
+  document.getElementById("saveAnnouncementButton").textContent =
+    "บันทึกประกาศ";
+  document.getElementById("cancelAnnouncementEdit").classList.add("hidden");
+
+  const message = document.getElementById("announcementMessage");
+  message.className = "message";
+  message.textContent = "";
+}
+
+/* ปุ่มยกเลิกการแก้ไขประกาศ */
+document.getElementById("cancelAnnouncementEdit")
+  .addEventListener("click", resetAnnouncementForm);
+
+/* เพิ่มหรือแก้ไขประกาศ จากนั้นบันทึกและอัปเดตหน้าแรก */
+document.getElementById("announcementForm").addEventListener("submit", event => {
+  event.preventDefault();
+
+  if (!event.currentTarget.reportValidity()) return;
+
+  const id = document.getElementById("announcementId").value;
+  const jobs = getJobs();
+
+  const record = {
+    id: id || "job-" + Date.now(),
+    title: document.getElementById("jobTitle").value.trim(),
+    openings: document.getElementById("jobOpenings").value.trim(),
+    deadline: document.getElementById("jobDeadline").value.trim(),
+    fee: document.getElementById("jobFee").value.trim(),
+    status: document.getElementById("jobStatus").value,
+    description: document.getElementById("jobDescription").value.trim()
+  };
+
+  if (id) {
+    const index = jobs.findIndex(job => job.id === id);
+    if (index < 0) return;
+    jobs[index] = record;
+  } else {
+    jobs.unshift(record);
+  }
+
+  saveJobs(jobs);
+  renderAnnouncementsTable();
+  renderHome();
+  resetAnnouncementForm();
+
+  showMessage(
+    document.getElementById("announcementMessage"),
+    "success",
+    id ? "แก้ไขประกาศเรียบร้อยแล้ว" : "เพิ่มประกาศเรียบร้อยแล้ว"
+  );
+});
+
+/* แสดงรายชื่อผู้ใช้งาน ซึ่งเข้าถึงได้เฉพาะผู้ดูแลระบบ */
+function renderUsers() {
+  if (currentUser?.role !== "admin") return;
+
+  const users = getUsers();
+  const container = document.getElementById("usersTable");
+
+  if (users.length === 0) {
+    container.innerHTML =
+      '<div class="empty">ยังไม่มีบัญชีผู้ใช้งาน</div>';
+    return;
+  }
+
+  container.innerHTML = `
+    <table>
+      <thead>
+        <tr><th>ชื่อผู้ใช้งาน</th><th>ชื่อบัญชี</th><th>สิทธิ์</th><th>จัดการ</th></tr>
+      </thead>
+      <tbody>
+        ${users.map(user => `
+          <tr>
+            <td>${escapeHtml(user.displayName)}</td>
+            <td>${escapeHtml(user.username)}</td>
+            <td>${user.role === "admin" ? "ผู้ดูแลระบบ" : "เจ้าหน้าที่"}</td>
+            <td>
+              <div class="inline-actions">
+                <button class="button button-secondary button-small edit-user"
+                  type="button" data-id="${escapeHtml(user.id)}">แก้ไข</button>
+                <button class="button button-danger button-small delete-user"
+                  type="button" data-id="${escapeHtml(user.id)}">ลบ</button>
+              </div>
+            </td>
+          </tr>
+        `).join("")}
+      </tbody>
+    </table>
+  `;
+
+  container.querySelectorAll(".edit-user").forEach(button => {
+    button.addEventListener("click", () => editUser(button.dataset.id));
+  });
+
+  container.querySelectorAll(".delete-user").forEach(button => {
+    button.addEventListener("click", () => deleteUser(button.dataset.id));
+  });
+}
+
+/* ล้างแบบฟอร์มบัญชีผู้ใช้และกลับไปโหมดเพิ่มบัญชี */
+function resetUserForm() {
+  document.getElementById("userForm").reset();
+  document.getElementById("userId").value = "";
+  document.getElementById("userEditorTitle").textContent =
+    "เพิ่มบัญชีเจ้าหน้าที่";
+  document.getElementById("saveUserButton").textContent = "เพิ่มบัญชี";
+  document.getElementById("cancelUserEdit").classList.add("hidden");
+  document.getElementById("userPassword").required = true;
+  document.getElementById("passwordHint").textContent =
+    "กำหนดรหัสผ่านอย่างน้อย 6 ตัวอักษร";
+
+  const message = document.getElementById("userMessage");
+  message.className = "message";
+  message.textContent = "";
+}
+
+/* โหลดข้อมูลบัญชีเดิมลงในแบบฟอร์มแก้ไข */
+function editUser(id) {
+  if (currentUser?.role !== "admin") return;
+
+  const user = getUsers().find(item => item.id === id);
+  if (!user) return;
+
+  document.getElementById("userId").value = user.id;
+  document.getElementById("userDisplayName").value = user.displayName;
+  document.getElementById("userName").value = user.username;
+  document.getElementById("userRole").value = user.role;
+  document.getElementById("userPassword").value = "";
+  document.getElementById("userPassword").required = false;
+  document.getElementById("passwordHint").textContent =
+    "เว้นว่างไว้หากไม่ต้องการเปลี่ยนรหัสผ่าน";
+  document.getElementById("userEditorTitle").textContent =
+    "แก้ไขบัญชีเจ้าหน้าที่";
+  document.getElementById("saveUserButton").textContent =
+    "บันทึกการแก้ไข";
+  document.getElementById("cancelUserEdit").classList.remove("hidden");
+}
+
+/* ลบบัญชี โดยห้ามลบบัญชีที่กำลังใช้งานหรือผู้ดูแลระบบคนสุดท้าย */
+function deleteUser(id) {
+  if (currentUser?.role !== "admin") return;
+
+  const users = getUsers();
+  const user = users.find(item => item.id === id);
+  if (!user) return;
+
+  if (currentUser.id === id) {
+    alert("ไม่สามารถลบบัญชีที่กำลังเข้าสู่ระบบอยู่ได้");
+    return;
+  }
+
+  const adminCount = users.filter(item => item.role === "admin").length;
+
+  if (user.role === "admin" && adminCount <= 1) {
+    alert("ต้องมีบัญชีผู้ดูแลระบบอย่างน้อย 1 บัญชี");
+    return;
+  }
+
+  if (!confirm(`ยืนยันการลบบัญชี ${user.username} หรือไม่?`)) return;
+
+  saveUsers(users.filter(item => item.id !== id));
+  renderUsers();
+}
+
+/* เพิ่มหรือแก้ไขบัญชีผู้ใช้งาน โดยตรวจชื่อซ้ำและรักษาผู้ดูแลระบบอย่างน้อยหนึ่งบัญชี */
+document.getElementById("userForm").addEventListener("submit", event => {
+  event.preventDefault();
+  if (currentUser?.role !== "admin") return;
+
+  const message = document.getElementById("userMessage");
+  const id = document.getElementById("userId").value;
+  const displayName = document.getElementById("userDisplayName").value.trim();
+  const username = document.getElementById("userName").value.trim();
+  const password = document.getElementById("userPassword").value;
+  const role = document.getElementById("userRole").value;
+  const users = getUsers();
+
+  const usernameExists = users.some(user =>
+    user.username.toLowerCase() === username.toLowerCase() &&
+    user.id !== id
+  );
+
+  if (usernameExists) {
+    showMessage(message, "error", "ชื่อบัญชีนี้มีผู้ใช้งานแล้ว");
+    return;
+  }
+
+  if (!id && password.length < 6) {
+    showMessage(message, "error", "รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร");
+    return;
+  }
+
+  const existing = users.find(user => user.id === id);
+
+  if (id && !existing) {
+    showMessage(message, "error", "ไม่พบบัญชีที่ต้องการแก้ไข");
+    return;
+  }
+
+  if (existing?.role === "admin" && role !== "admin") {
+    const adminCount = users.filter(user => user.role === "admin").length;
+
+    if (adminCount <= 1) {
+      showMessage(message, "error", "ต้องมีบัญชีผู้ดูแลระบบอย่างน้อย 1 บัญชี");
+      return;
+    }
+  }
+
+  const updatedUser = {
+    id: id || "user-" + Date.now(),
+    username,
+    displayName,
+    role,
+    // หากช่องรหัสผ่านว่างตอนแก้ไข ให้ใช้รหัสผ่านเดิม
+    password: password || existing?.password
+  };
+
+  const updatedUsers = id
+    ? users.map(user => user.id === id ? updatedUser : user)
+    : [updatedUser, ...users];
+
+  saveUsers(updatedUsers);
+
+  // ถ้าแก้ไขบัญชีตัวเอง ให้อัปเดตข้อมูลผู้ใช้ที่กำลังเข้าสู่ระบบด้วย
+  if (currentUser.id === updatedUser.id) {
+    currentUser = updatedUser;
+    document.getElementById("staffWelcome").textContent =
+      `เข้าสู่ระบบในชื่อ ${updatedUser.displayName} ` +
+      `(${updatedUser.role === "admin" ? "ผู้ดูแลระบบ" : "เจ้าหน้าที่"})`;
+  }
+
+  resetUserForm();
+  renderUsers();
+
+  showMessage(
+    document.getElementById("userMessage"),
+    "success",
+    id ? "แก้ไขบัญชีเรียบร้อยแล้ว" : "เพิ่มบัญชีเรียบร้อยแล้ว"
+  );
+});
+
+/* ปุ่มยกเลิกการแก้ไขบัญชีผู้ใช้งาน */
+document.getElementById("cancelUserEdit")
+  .addEventListener("click", resetUserForm);
+
+/* ตรวจบัญชีและรหัสผ่าน แล้วเปิดระบบเจ้าหน้าที่ตามสิทธิ์ของบัญชี */
+document.getElementById("loginForm").addEventListener("submit", event => {
+  event.preventDefault();
+
+  const username = document.getElementById("username").value.trim();
+  const password = document.getElementById("password").value;
+  const message = document.getElementById("loginMessage");
+
+  const user = getUsers().find(item =>
+    item.username.toLowerCase() === username.toLowerCase() &&
+    item.password === password
+  );
+
+  if (!user) {
+    showMessage(message, "error", "ชื่อบัญชีหรือรหัสผ่านไม่ถูกต้อง");
+    return;
+  }
+
+  currentUser = user;
+
+  document.getElementById("staffWelcome").textContent =
+    `เข้าสู่ระบบในชื่อ ${user.displayName} ` +
+    `(${user.role === "admin" ? "ผู้ดูแลระบบ" : "เจ้าหน้าที่"})`;
+
+  // ซ่อนเมนูจัดการบัญชีจากเจ้าหน้าที่ทั่วไป
+  document.querySelectorAll(".admin-only").forEach(button => {
+    button.classList.toggle("hidden", user.role !== "admin");
+  });
+
+  // เริ่มต้นที่แท็บใบสมัครทุกครั้งหลังเข้าสู่ระบบ
+  document.querySelectorAll(".tab-button").forEach(button => {
+    button.classList.remove("active");
+  });
+
+  document.querySelectorAll(".staff-panel").forEach(panel => {
+    panel.classList.remove("active");
+  });
+
+  document.querySelector('[data-tab="applicationsPanel"]').classList.add("active");
+  document.getElementById("applicationsPanel").classList.add("active");
+
+  event.currentTarget.reset();
+  message.className = "message";
+  message.textContent = "";
+
+  showView("staffView");
+});
+
+/* ออกจากระบบและซ่อนเมนูสำหรับผู้ดูแลระบบ */
+document.getElementById("logoutButton").addEventListener("click", () => {
+  currentUser = null;
+
+  document.querySelectorAll(".admin-only").forEach(button => {
+    button.classList.add("hidden");
+  });
+
+  showView("homeView");
+});
+
+/* เริ่มต้นระบบ: เตรียมข้อมูลตั้งต้น แล้ววาดประกาศหน้าแรก */
+initializeStorage();
+renderHome();
+</script>
+</body>
+</html>
